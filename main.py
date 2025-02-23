@@ -96,7 +96,7 @@ def evaluate(model, loader):
 
 
 
-def test(model, test_folder, output_csv="submission.csv"):
+def test(model, test_folder="dataset/test_images", output_csv="submission.csv"):
     # Set model to evaluation mode
     model.eval()
 
@@ -145,7 +145,7 @@ if __name__ == "__main__":
         project="cnn-against-malaria",
         name="resnet18",    
     )
-    train(model, train_loader, val_loader, criterion, optimizer, epochs=10)
+    train(model, train_loader, val_loader, criterion, optimizer, epochs=1)
     wandb.finish()
 
-    test()
+    test(model)
