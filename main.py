@@ -7,8 +7,11 @@ from torchvision.datasets import ImageFolder
 from torch.utils.data import DataLoader
 
 import wandb
+import os, csv
+from PIL import Image
 
 
+os.environ["TORCH_HOME"] = "/ocean/projects/cis240109p/abollado/.cache"
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 
@@ -25,8 +28,20 @@ val_dataset = ImageFolder(root="dataset/val", transform=transform)
 
 
 def load_model():
-    model = models.resnet18(pretrained=True)
-    model.fc = nn.Linear(model.fc.in_features, 1)  # Modify last layer for binary classification
+    
+    model = models.resnet18(weights=models.ResNet18_Weights.IMAGENET1K_V1)
+
+    # Freeze all layers except the final fully connected layer
+    for param in model.parameters():
+        param.requires_grad = False
+
+    # Modify the last fully connected layer for binary classification
+    model.fc = nn.Linear(model.fc.in_features, 1)  # Modify for binary classification
+    
+    # Unfreeze the final layer
+    for param in model.fc.parameters():
+        param.requires_grad = True
+
     model = model.to(device)    
     return model
 
@@ -81,6 +96,38 @@ def evaluate(model, loader):
 
 
 
+def test(model, test_folder, output_csv="submission.csv"):
+    # Set model to evaluation mode
+    model.eval()
+
+    # Create a list to store the results
+    results = []
+
+    # Iterate through test images in the specified folder
+    for img_name in os.listdir(test_folder):
+        img_path = os.path.join(test_folder, img_name)
+        
+        # Load image
+        image = Image.open(img_path).convert('RGB')  # Convert to RGB if needed
+        image = transform(image).unsqueeze(0).to(device)  # Add batch dimension and move to device
+        
+        # Predict label
+        with torch.no_grad():
+            output = model(image)
+            predicted_label = (torch.sigmoid(output) > 0.5).float().item()  # Apply sigmoid and threshold
+
+        # Add image name and predicted label to results
+        results.append([img_name, int(predicted_label)])
+
+    # Write the results to a CSV file
+    with open(output_csv, mode="w", newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(["img_name", "label"])  # Write header
+        writer.writerows(results)  # Write predictions
+
+    print(f"Test predictions saved to {output_csv}")
+
+
 
 if __name__ == "__main__":
 
@@ -100,3 +147,5 @@ if __name__ == "__main__":
     )
     train(model, train_loader, val_loader, criterion, optimizer, epochs=10)
     wandb.finish()
+
+    test()
