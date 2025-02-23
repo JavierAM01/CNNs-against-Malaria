@@ -20,7 +20,7 @@ transform = transforms.Compose([
 ])
 
 # Load dataset
-train_dataset = ImageFolder(root="dataset/train_images", transform=transform)
+train_dataset = ImageFolder(root="dataset/train", transform=transform)
 val_dataset = ImageFolder(root="dataset/val", transform=transform)
 
 
