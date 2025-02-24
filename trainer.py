@@ -43,18 +43,14 @@ def load_model(name, device="cpu", pretrained_path=""):
     else:
         raise ValueError(f"Model {name} not recognized")
 
-    # Freeze all layers except the last two fully connected layers
-    for name, param in model.named_parameters():
-        if "fc" in name or "classifier" in name or "top" in name:
-            # Unfreeze the last two layers
-            param.requires_grad = True
-        else:
-            # Freeze all other layers
-            param.requires_grad = False
+    # Freeze all layers
+    for p in model.parameters():
+        p.requires_grad = False
 
-    # Modify the last fully connected layer for binary classification
-    if hasattr(model, 'fc'):
-        print("Modifying last fully connected layer for binary classification [fc]")
+    ## RESNET ##
+    if "resnet" in name:
+        for p in model.fc.parameters():
+            p.requires_grad = True
         n = 256
         model.fc = nn.Sequential(
             nn.Linear(model.fc.in_features, n),  # 2048 -> n
@@ -64,10 +60,20 @@ def load_model(name, device="cpu", pretrained_path=""):
         if pretrained_path != "":
             model.fc.load_state_dict(torch.load(pretrained_path))
             print(f"Using model from: {pretrained_path}")
-    # elif hasattr(model, 'classifier'):
-    #     model.classifier[6] = nn.Linear(model.classifier[6].in_features, 1)
-    # elif hasattr(model, 'top'):
-    #     model.top = nn.Linear(model.top.in_features, 1)
+
+    ## VGG ##
+    elif "vgg" in name:
+        for p in model.classifier[-1].parameters():
+            p.requires_grad = True
+        n = 128
+        model.classifier[-1] = nn.Sequential(
+            nn.Linear(model.fc.in_features, n),  # 4096 -> n
+            nn.ReLU(),
+            nn.Linear(n, 1)  # n -> 1
+        )
+        if pretrained_path != "":
+            model.classifier[-1].load_state_dict(torch.load(pretrained_path))
+            print(f"Using model from: {pretrained_path}")
 
     # Print the number of trainable and non-trainable parameters
     trainable, non_trainable = count_parameters(model)
