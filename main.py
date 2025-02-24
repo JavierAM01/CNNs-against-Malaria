@@ -7,7 +7,7 @@ from torchvision.datasets import ImageFolder
 from torch.utils.data import DataLoader
 
 import wandb
-import os, csv
+import os, csv, sys
 from PIL import Image
 
 
@@ -27,23 +27,56 @@ train_dataset = ImageFolder(root="dataset/train", transform=transform)
 val_dataset = ImageFolder(root="dataset/val", transform=transform)
 
 
-def load_model():
-    
-    model = models.resnet18(weights=models.ResNet18_Weights.IMAGENET1K_V1)
+import torch
+import torch.nn as nn
+from torchvision import models
+
+def load_model(name):
+
+    if name == "resnet18":
+        model = models.resnet18(weights=models.ResNet18_Weights.IMAGENET1K_V1)
+    elif name == "resnet34":
+        model = models.resnet34(weights=models.ResNet34_Weights.IMAGENET1K_V1)
+    elif name == "resnet50":
+        model = models.resnet50(weights=models.ResNet50_Weights.IMAGENET1K_V1)
+    elif name == "resnet101":
+        model = models.resnet101(weights=models.ResNet101_Weights.IMAGENET1K_V1)
+    elif name == "resnet152":
+        model = models.resnet152(weights=models.ResNet152_Weights.IMAGENET1K_V1)
+    elif name == "vgg16":
+        model = models.vgg16(weights=models.VGG16_Weights.IMAGENET1K_V1)
+    elif name == "vgg19":
+        model = models.vgg19(weights=models.VGG19_Weights.IMAGENET1K_V1)
+    elif name == "densenet121":
+        model = models.densenet121(weights=models.DenseNet121_Weights.IMAGENET1K_V1)
+    elif name == "mobilenet_v2":
+        model = models.mobilenet_v2(weights=models.MobileNet_V2_Weights.IMAGENET1K_V1)
+    elif name == "inception_v3":
+        model = models.inception_v3(weights=models.Inception_V3_Weights.IMAGENET1K_V1)
+    else:
+        raise ValueError(f"Model {name} not recognized")
 
     # Freeze all layers except the final fully connected layer
     for param in model.parameters():
         param.requires_grad = False
 
     # Modify the last fully connected layer for binary classification
-    model.fc = nn.Linear(model.fc.in_features, 1)  # Modify for binary classification
-    
+    if hasattr(model, 'fc'):  # ResNet, VGG, DenseNet, etc.
+        model.fc = nn.Linear(model.fc.in_features, 1)
+    elif hasattr(model, 'classifier'):  # VGG, MobileNet, Inception
+        model.classifier[6] = nn.Linear(model.classifier[6].in_features, 1)
+    elif hasattr(model, 'top'):  # Inception V3
+        model.top = nn.Linear(model.top.in_features, 1)
+    else:
+        raise ValueError(f"Model {name} does not have a recognizable final layer.")
+
     # Unfreeze the final layer
-    for param in model.fc.parameters():
+    for param in model.fc.parameters() if hasattr(model, 'fc') else model.classifier[6].parameters():
         param.requires_grad = True
 
-    model = model.to(device)    
+    model = model.to(device)
     return model
+
 
 def train(model, train_loader, val_loader, criterion, optimizer, epochs=10):
     model.train()
@@ -132,7 +165,8 @@ def test(model, test_folder="dataset/test_images", output_csv="submission.csv"):
 if __name__ == "__main__":
 
     # get model
-    model = load_model()
+    name = sys.argv[1]
+    model = load_model(name)
     criterion = nn.BCEWithLogitsLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 
@@ -143,7 +177,7 @@ if __name__ == "__main__":
     # train model
     wandb.init(
         project="cnn-against-malaria",
-        name="resnet18",    
+        name=name,    
     )
     train(model, train_loader, val_loader, criterion, optimizer, epochs=1)
     wandb.finish()
