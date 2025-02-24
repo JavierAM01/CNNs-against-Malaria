@@ -149,6 +149,8 @@ def load_model(name, device="cpu", pretrained_path=""):
             nn.Linear(512, 1)
         )
         if pretrained_path != "":
+            model.fc.load_state_dict(torch.load(pretrained_path))
+            print(f"Using model from: {pretrained_path}")
 
     # Print the number of trainable and non-trainable parameters
     trainable, non_trainable = count_parameters(model)
