@@ -4,9 +4,9 @@
 models=("resnet18" "resnet50" "resnet152" "vgg16" "vgg19")
 
 # Loop through the models and run the Python script
-for model in "nofreeze/${models[@]}"
+for model in "${models[@]}"
 do
     echo "Training model: $model"
-    python main.py "$model"
+    python main.py "nofreeze/$model"
 done
 

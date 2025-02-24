@@ -74,7 +74,12 @@ def load_model(name):
 
     # Modify the last fully connected layer for binary classification
     if hasattr(model, 'fc'):
-        model.fc = nn.Linear(model.fc.in_features, 1)
+        n = 256
+        model.fc = nn.Sequential(
+            nn.Linear(model.fc.in_features, n),  # 2048 -> n
+            nn.ReLU(),
+            nn.Linear(n, 1)  # n -> 1
+        )
     elif hasattr(model, 'classifier'):
         model.classifier[6] = nn.Linear(model.classifier[6].in_features, 1)
     elif hasattr(model, 'top'):
@@ -84,12 +89,12 @@ def load_model(name):
     trainable, non_trainable = count_parameters(model)
     print(f"Trainable parameters: {trainable}")
     print(f"Non-trainable parameters: {non_trainable}")
-    
+
     model = model.to(device)
     return model
 
 
-def train(model, train_loader, val_loader, criterion, optimizer, epochs=10):
+def train(model, train_loader, val_loader, criterion, optimizer, epochs=10, group=""):
     model.train()
     
     for epoch in range(epochs):
@@ -114,10 +119,11 @@ def train(model, train_loader, val_loader, criterion, optimizer, epochs=10):
         train_acc = correct / total
         val_acc = evaluate(model, val_loader)
 
+        ss = "" if group == "" else f"{group}/"
         wandb.log({
-            "train_loss": total_loss / len(train_loader),
-            "train_acc": train_acc,
-            "val_acc": val_acc
+            f"{ss}train_loss": total_loss / len(train_loader),
+            f"{ss}train_acc": train_acc,
+            f"{ss}val_acc": val_acc
         }, step=epoch)
         
         print(f"Epoch [{epoch+1}/{epochs}], Loss: {total_loss:.4f}, Train Acc: {train_acc:.2f}, Val Acc: {val_acc:.2f}")
@@ -176,8 +182,10 @@ def test(model, test_folder="dataset/test_images", output_csv="submission.csv"):
 if __name__ == "__main__":
 
     # get model
-    name = sys.argv[1]
-    model = load_model(name.split("/")[-1])
+    fullnames = sys.argv[1].split("/")
+    name = fullnames[-1]
+    group = "" if len(fullnames) == 1 else fullnames[0]
+    model = load_model(name)
     criterion = nn.BCEWithLogitsLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 
@@ -190,7 +198,7 @@ if __name__ == "__main__":
         project="cnn-against-malaria",
         name=name,    
     )
-    train(model, train_loader, val_loader, criterion, optimizer, epochs=10)
+    train(model, train_loader, val_loader, criterion, optimizer, epochs=10, group=group)
     wandb.finish()
 
     test(model, output_csv=f"submission_{name}.csv")
