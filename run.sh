@@ -14,7 +14,7 @@ do
     for lr in "${lrs[@]}"
     do
         echo "Training model vgg16 [optim=$optim, lr=$lr]"
-        python main.py --name="vgg16_$optim_$lr" --gruop="vgg16" --model="vgg16" --epochs=10 --lr=$lr --optim=$optim
+        python main.py --name="vgg16_$optim_$lr" --group="vgg16" --model="vgg16" --epochs=10 --lr=$lr --optim=$optim
     done
 done
 
@@ -24,6 +24,6 @@ done
 for model in "${models[@]}"
 do
     echo "Training model: $model"
-    python main.py --name="$model" --gruop="models" --model="$model" --epochs=30 --lr=0.001
+    python main.py --name="$model" --group="models" --model="$model" --epochs=30 --lr=0.001
 done
 
