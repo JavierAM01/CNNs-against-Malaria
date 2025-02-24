@@ -18,7 +18,7 @@ def get_device(model):
     return next(model.parameters()).device
 
 
-def load_model(name, device="cpu", pretrained_path=""):
+def load_model(name, device="cpu", pretrained_path="", freeze=True):
 
     if name == "resnet18":
         model = models.resnet18(weights=models.ResNet18_Weights.IMAGENET1K_V1)
@@ -58,8 +58,9 @@ def load_model(name, device="cpu", pretrained_path=""):
         raise ValueError(f"Model {name} not recognized")
 
     # Freeze all layers
-    for p in model.parameters():
-        p.requires_grad = False
+    if freeze:
+        for p in model.parameters():
+            p.requires_grad = False
 
     ## RESNET ##
     if "resnet" in name:

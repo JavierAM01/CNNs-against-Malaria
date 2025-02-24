@@ -15,6 +15,7 @@ parser.add_argument("--name", type=str)
 parser.add_argument("--model", type=str)
 parser.add_argument("--group", type=str)
 parser.add_argument("--pretrained_path", type=str, default="")
+parser.add_argument("--freeze", type=bool, default=True)
 parser.add_argument("--full_dataset", type=bool, default=False)
 parser.add_argument("--epochs", type=int, default=10)
 parser.add_argument("--batch_size", type=int, default=32)
@@ -36,7 +37,7 @@ if __name__ == "__main__":
     train_loader, val_loader = create_data_loaders(train_dataset, val_dataset, batch_size=args.batch_size)
 
     # get model
-    model = load_model(args.model, device, pretrained_path=args.pretrained_path)
+    model = load_model(args.model, device, pretrained_path=args.pretrained_path, freeze=args.freeze)
 
     # train model
     wandb.init(
