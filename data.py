@@ -23,8 +23,8 @@ transform = transforms.Compose([
 def load_data(full_dataset=False):
     if full_dataset:
         from torch.utils.data import ConcatDataset
-        train_train_dataset = ImageFolder(root="dataset", transform=train_transform)
-        val_train_dataset = ImageFolder(root="dataset", transform=train_transform)
+        train_train_dataset = ImageFolder(root="dataset/train", transform=train_transform)
+        val_train_dataset = ImageFolder(root="dataset/val", transform=train_transform)
         train_dataset = ConcatDataset([train_train_dataset, val_train_dataset])
     else:
         train_dataset = ImageFolder(root="dataset/train", transform=train_transform)
