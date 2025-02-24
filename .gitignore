@@ -1,5 +1,5 @@
 dataset/*
-results/*
+models/*
 wandb/*
 __pycache__/*
 *.csv
