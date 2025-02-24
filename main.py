@@ -63,26 +63,28 @@ def load_model(name):
     else:
         raise ValueError(f"Model {name} not recognized")
 
-    # # Freeze all layers except the final fully connected layer
-    # for param in model.parameters():
-    #     param.requires_grad = False
+    # Freeze all layers except the last two fully connected layers
+    for name, param in model.named_parameters():
+        if "fc" in name or "classifier" in name or "top" in name:
+            # Unfreeze the last two layers
+            param.requires_grad = True
+        else:
+            # Freeze all other layers
+            param.requires_grad = False
 
     # Modify the last fully connected layer for binary classification
-    if hasattr(model, 'fc'):  # ResNet, VGG, DenseNet, etc.
+    if hasattr(model, 'fc'):
         model.fc = nn.Linear(model.fc.in_features, 1)
-    # elif hasattr(model, 'classifier'):  # VGG, MobileNet, Inception
-    #     model.classifier[6] = nn.Linear(model.classifier[6].in_features, 1)
-    # elif hasattr(model, 'top'):  # Inception V3
-    #     model.top = nn.Linear(model.top.in_features, 1)
-    else:
-        raise ValueError(f"Model {name} does not have a recognizable final layer.")
+    elif hasattr(model, 'classifier'):
+        model.classifier[6] = nn.Linear(model.classifier[6].in_features, 1)
+    elif hasattr(model, 'top'):
+        model.top = nn.Linear(model.top.in_features, 1)
 
-    # # Unfreeze the final layer
-    # for param in model.fc.parameters() if hasattr(model, 'fc') else model.classifier[6].parameters():
-    #     param.requires_grad = True
-
+    # Print the number of trainable and non-trainable parameters
     trainable, non_trainable = count_parameters(model)
-    print(f"Model {name} has {trainable} trainable parameters and {non_trainable} non-trainable parameters")
+    print(f"Trainable parameters: {trainable}")
+    print(f"Non-trainable parameters: {non_trainable}")
+    
     model = model.to(device)
     return model
 
@@ -175,7 +177,7 @@ if __name__ == "__main__":
 
     # get model
     name = sys.argv[1]
-    model = load_model(name)
+    model = load_model(name.split("/")[-1])
     criterion = nn.BCEWithLogitsLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 
