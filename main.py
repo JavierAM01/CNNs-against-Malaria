@@ -34,7 +34,6 @@ if __name__ == "__main__":
     train_loader, val_loader = create_data_loaders(train_dataset, val_dataset)
 
     # get model
-    group = args.group
     model = load_model(args.model, device, pretrained_path=args.pretrained_path)
 
     # train model
@@ -42,7 +41,7 @@ if __name__ == "__main__":
         project="cnn-against-malaria",
         name=args.name,    
     )
-    train(model, train_loader, val_loader, epochs=25, group=group, lr=args.lr, optim=args.optim)
+    train(model, train_loader, val_loader, epochs=args.epochs, group=args.group, lr=args.lr, optim=args.optim)
     wandb.finish()
     if "resnet" in args.model:
         torch.save(model.fc.state_dict(), f"{save_path}/model.pt")
