@@ -34,12 +34,26 @@ def load_model(name, device="cpu", pretrained_path=""):
         model = models.vgg16(weights=models.VGG16_Weights.IMAGENET1K_V1)
     elif name == "vgg19":
         model = models.vgg19(weights=models.VGG19_Weights.IMAGENET1K_V1)
-    # elif name == "densenet121":
-    #     model = models.densenet121(weights=models.DenseNet121_Weights.IMAGENET1K_V1)
-    # elif name == "mobilenet_v2":
-    #     model = models.mobilenet_v2(weights=models.MobileNet_V2_Weights.IMAGENET1K_V1)
-    # elif name == "inception_v3":
-    #     model = models.inception_v3(weights=models.Inception_V3_Weights.IMAGENET1K_V1)
+    elif name == "densenet121":
+        model = models.densenet121(weights=models.DenseNet121_Weights.IMAGENET1K_V1)
+    elif name == "densenet169":
+        model = models.densenet169(weights=models.DenseNet169_Weights.IMAGENET1K_V1)
+    elif name == "mobilenet_v3":
+        model = models.mobilenet_v3_large(weights=models.MobileNet_V3_Large_Weights.IMAGENET1K_V1)
+    elif name == "efficientnet_b0":
+        model = models.efficientnet_b0(weights=models.EfficientNet_B0_Weights.IMAGENET1K_V1)
+    elif name == "efficientnet_b3":
+        model = models.efficientnet_b3(weights=models.EfficientNet_B3_Weights.IMAGENET1K_V1)
+    elif name == "regnet_y_400mf":
+        model = models.regnet_y_400mf(weights=models.RegNet_Y_400MF_Weights.IMAGENET1K_V1)
+    elif name == "convnext_tiny":
+        model = models.convnext_tiny(weights=models.ConvNeXt_Tiny_Weights.IMAGENET1K_V1)
+    # elif name == "swin_t":
+    #     model = models.swin_t(weights=models.Swin_T_Weights.IMAGENET1K_V1)
+    # elif name == "mnasnet":
+    #     model = models.mnasnet1_0(weights=models.MNASNet1_0_Weights.IMAGENET1K_V1)
+    # elif name == "vit_b_16":
+    #     model = models.vit_b_16(weights=models.ViT_B_16_Weights.IMAGENET1K_V1)
     else:
         raise ValueError(f"Model {name} not recognized")
 
@@ -96,6 +110,45 @@ def load_model(name, device="cpu", pretrained_path=""):
         if pretrained_path != "":
             model.classifier[-1].load_state_dict(torch.load(pretrained_path))
             print(f"Using model from: {pretrained_path}")
+
+    ## DENSENET + EFFICIENTNET ##
+    elif "densenet" in name or "efficientnet" in name:
+        for p in model.classifier.parameters():
+            p.requires_grad = True
+        model.classifier = nn.Sequential(
+            nn.Dropout(0.2),
+            nn.Linear(model.classifier.in_features, 1000),  # 1024 / 1664
+            nn.ReLU(),
+            nn.Linear(1000, 1)
+        )
+
+    ## REGNET ##
+    elif "regnet" in name:
+        for p in model.fc.parameters():
+            p.requires_grad = True
+        model.fc = nn.Sequential(
+            nn.Linear(model.fc.in_features, 1000),  # 440 -> 1000
+            nn.ReLU(),
+            nn.Linear(1000, 512),
+            nn.ReLU(),
+            nn.Linear(512, 1)
+        )
+        if pretrained_path != "":
+            model.fc.load_state_dict(torch.load(pretrained_path))
+            print(f"Using model from: {pretrained_path}")
+
+    ## CONVNEXT ##
+    elif "convnext" in name:
+        for p in model.classifier[-1].parameters():
+            p.requires_grad = True
+        model.classifier[-1] = nn.Sequential(
+            nn.Linear(model.classifier.in_features, 1000),  # 768
+            nn.ReLU(),
+            nn.Linear(1000, 512),
+            nn.ReLU(),
+            nn.Linear(512, 1)
+        )
+        if pretrained_path != "":
 
     # Print the number of trainable and non-trainable parameters
     trainable, non_trainable = count_parameters(model)
