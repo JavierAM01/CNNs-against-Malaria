@@ -16,6 +16,15 @@ device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 
 # Define image transformations
+train_transform = transforms.Compose([
+    transforms.Resize((128, 128)),  # Resize to fit model input
+    transforms.RandomHorizontalFlip(),  # Random horizontal flip for augmentation
+    transforms.RandomRotation(20),  # Random rotation
+    transforms.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2, hue=0.2),  # Random color jitter
+    transforms.ToTensor(),  # Convert to tensor
+    transforms.Normalize(mean=[0.5], std=[0.5])  # Normalize
+])
+
 transform = transforms.Compose([
     transforms.Resize((128, 128)),  # Resize to fit model input
     transforms.ToTensor(),  # Convert to tensor
@@ -23,7 +32,7 @@ transform = transforms.Compose([
 ])
 
 # Load dataset
-train_dataset = ImageFolder(root="dataset/train", transform=transform)
+train_dataset = ImageFolder(root="dataset/train", transform=train_transform)
 val_dataset = ImageFolder(root="dataset/val", transform=transform)
 
 
@@ -164,7 +173,7 @@ def test(model, test_folder="dataset/test_images", output_csv="submission.csv"):
         # Predict label
         with torch.no_grad():
             output = model(image)
-            predicted_label = (torch.sigmoid(output) > 0.5).float().item()  # Apply sigmoid and threshold
+            predicted_label = (torch.sigmoid(output) < 0.5).float().item()  # Apply sigmoid and threshold
 
         # Add image name and predicted label to results
         results.append([img_name, int(predicted_label)])
@@ -198,7 +207,7 @@ if __name__ == "__main__":
         project="cnn-against-malaria",
         name=name,    
     )
-    train(model, train_loader, val_loader, criterion, optimizer, epochs=10, group=group)
+    train(model, train_loader, val_loader, criterion, optimizer, epochs=25, group=group)
     wandb.finish()
 
     test(model, output_csv=f"submission_{name}.csv")
