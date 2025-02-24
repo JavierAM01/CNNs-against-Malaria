@@ -15,6 +15,7 @@ parser.add_argument("--name", type=str)
 parser.add_argument("--model", type=str)
 parser.add_argument("--group", type=str)
 parser.add_argument("--pretrained_path", type=str, default="")
+parser.add_argument("--full_dataset", type=bool, default=False)
 parser.add_argument("--epochs", type=int, default=10)
 parser.add_argument("--batch_size", type=int, default=32)
 parser.add_argument("--lr", type=float, default=0.001)
@@ -31,7 +32,7 @@ if __name__ == "__main__":
     os.makedirs(save_path, exist_ok=True)
 
     # get data
-    train_dataset, val_dataset = load_data()
+    train_dataset, val_dataset = load_data(args.full_dataset)
     train_loader, val_loader = create_data_loaders(train_dataset, val_dataset, batch_size=args.batch_size)
 
     # get model
