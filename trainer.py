@@ -111,7 +111,7 @@ def load_model(name, device="cpu", pretrained_path=""):
             model.classifier[-1].load_state_dict(torch.load(pretrained_path))
             print(f"Using model from: {pretrained_path}")
 
-    ## DENSENET + EFFICIENTNET ##
+    ## DENSENET ##
     elif "densenet" in name:
         for p in model.classifier.parameters():
             p.requires_grad = True

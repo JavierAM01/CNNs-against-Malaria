@@ -2,7 +2,7 @@
 
 # List of model names
 # models=("resnet50" "vgg16" "resnet152" "vgg19")
-models=("vgg16" "densenet121" "mobilenet_v3" "efficientnet_b0" "regnet_y_400mf" "convnext_tiny")
+models=("mobilenet_v3" "efficientnet_b0" "convnext_tiny") # "vgg16" "densenet121" "regnet_y_400mf"
 lrs=("0.001")
 optims=("adam" "radam" "sgd")
 batch_sizes=("64" "256")
