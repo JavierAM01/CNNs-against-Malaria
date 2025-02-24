@@ -12,8 +12,12 @@ print("Using device: ", device)
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--name", type=str)
+parser.add_argument("--model", type=str)
 parser.add_argument("--group", type=str)
 parser.add_argument("--pretrained_path", type=str, default="")
+parser.add_argument("--epochs", type=int, default=10)
+parser.add_argument("--lr", type=float, default=0.001)
+parser.add_argument("--optim", type=str, default="adam", choices=["adam", "radam", "sgd"])
 args = parser.parse_args()
 
 
@@ -30,16 +34,15 @@ if __name__ == "__main__":
     train_loader, val_loader = create_data_loaders(train_dataset, val_dataset)
 
     # get model
-    name = args.name
     group = args.group
-    model = load_model(name, device, pretrained_path=args.pretrained_path)
+    model = load_model(args.model, device, pretrained_path=args.pretrained_path)
 
     # train model
     wandb.init(
         project="cnn-against-malaria",
-        name=name,    
+        name=args.name,    
     )
-    train(model, train_loader, val_loader, epochs=25, group=group)
+    train(model, train_loader, val_loader, epochs=25, group=group, lr=args.lr, optim=args.optim)
     wandb.finish()
     torch.save(model.fc.state_dict(), f"{save_path}/model_fc.pt")
 

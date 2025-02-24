@@ -77,12 +77,19 @@ def load_model(name, device="cpu", pretrained_path=""):
     return model
 
 
-def train(model, train_loader, val_loader, epochs=10, group=""):
+def train(model, train_loader, val_loader, epochs=10, group="", lr=0.001, optim="adam"):
     model.train()
     device = get_device(model)
 
     criterion = nn.BCEWithLogitsLoss()
-    optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
+    if optim == "adam":
+        optimizer = torch.optim.Adam(model.parameters(), lr=lr)
+    elif optim == "radam"
+        optimizer = torch.optim.RAdam(model.parameters(), lr=lr)
+    elif optim == "sgd":
+        optimizer = torch.optim.SGD(model.parameters(), lr=lr, momentum=0.9, weight_decay=1e-4)
+    else:
+        raise ValueError(f"Optimizer {optim} not recognized")
     
     for epoch in range(epochs):
         total_loss = 0.0

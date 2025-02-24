@@ -7,6 +7,6 @@ models=("resnet50" "vgg16" "resnet152" "vgg19")
 for model in "${models[@]}"
 do
     echo "Training model: $model"
-    python main.py "dataagumentation/$model"
+    python main.py --name="$model" --gruop="dataagumentation" --model="$model" --epochs=10 --lr=0.001
 done
 
