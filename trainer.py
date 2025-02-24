@@ -51,11 +51,22 @@ def load_model(name, device="cpu", pretrained_path=""):
     if "resnet" in name:
         for p in model.fc.parameters():
             p.requires_grad = True
-        n = 256
+        # n = 256
+        # model.fc = nn.Sequential(
+        #     nn.Linear(model.fc.in_features, n),  # 2048 -> n
+        #     nn.ReLU(),
+        #     nn.Linear(n, 1)  # n -> 1
+        # )
         model.fc = nn.Sequential(
-            nn.Linear(model.fc.in_features, n),  # 2048 -> n
+            nn.Linear(model.fc.in_features, 512),  # 2048 -> n
             nn.ReLU(),
-            nn.Linear(n, 1)  # n -> 1
+            nn.Linear(512, 128),
+            nn.ReLU(),
+            nn.Linear(128, 64),
+            nn.ReLU(),
+            nn.Linear(64, 32),
+            nn.ReLU(),
+            nn.Linear(32, 1)
         )
         if pretrained_path != "":
             model.fc.load_state_dict(torch.load(pretrained_path))
@@ -65,11 +76,22 @@ def load_model(name, device="cpu", pretrained_path=""):
     elif "vgg" in name:
         for p in model.classifier[-1].parameters():
             p.requires_grad = True
-        n = 128
+        # n = 128
+        # model.classifier[-1] = nn.Sequential(
+        #     nn.Linear(model.classifier[-1].in_features, n),  # 4096 -> n
+        #     nn.ReLU(),
+        #     nn.Linear(n, 1)  # n -> 1
+        # )
         model.classifier[-1] = nn.Sequential(
-            nn.Linear(model.classifier[-1].in_features, n),  # 4096 -> n
+            nn.Linear(model.classifier[-1].in_features, 512),  # 4096
             nn.ReLU(),
-            nn.Linear(n, 1)  # n -> 1
+            nn.Linear(512, 128),
+            nn.ReLU(),
+            nn.Linear(128, 64),
+            nn.ReLU(),
+            nn.Linear(64, 32),
+            nn.ReLU(),
+            nn.Linear(32, 1)
         )
         if pretrained_path != "":
             model.classifier[-1].load_state_dict(torch.load(pretrained_path))
