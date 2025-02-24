@@ -12,11 +12,8 @@ batch_sizes=("64" "256")
 # testing different optimizers in vgg16
 for bs in "${batch_sizes[@]}" 
 do
-    for lr in "${lrs[@]}"
-    do
-        echo "Training model vgg16 [optim=$optim, lr=$lr]"
-        python main.py --name="vgg16_adam__0.001_${bs}" --group="vgg16_v2" --model="vgg16" --epochs=10 --lr=0.001 --optim=adam --batch_size=$bs
-    done
+    echo "Training model vgg16 [optim=adaman, bs=$bs, lr=0.001]"
+    python main.py --name="vgg16_adam__0.001_${bs}" --group="vgg16_v2" --model="vgg16" --epochs=10 --lr=0.001 --optim=adam --batch_size=$bs
 done
 
 
