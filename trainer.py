@@ -54,6 +54,7 @@ def load_model(name, device="cpu", pretrained_path=""):
 
     # Modify the last fully connected layer for binary classification
     if hasattr(model, 'fc'):
+        print("Modifying last fully connected layer for binary classification [fc]")
         n = 256
         model.fc = nn.Sequential(
             nn.Linear(model.fc.in_features, n),  # 2048 -> n
