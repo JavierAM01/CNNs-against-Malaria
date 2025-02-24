@@ -67,7 +67,7 @@ def load_model(name, device="cpu", pretrained_path=""):
             p.requires_grad = True
         n = 128
         model.classifier[-1] = nn.Sequential(
-            nn.Linear(model.fc.in_features, n),  # 4096 -> n
+            nn.Linear(model.classifier[-1].in_features, n),  # 4096 -> n
             nn.ReLU(),
             nn.Linear(n, 1)  # n -> 1
         )
