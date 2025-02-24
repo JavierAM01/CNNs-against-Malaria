@@ -44,6 +44,9 @@ if __name__ == "__main__":
     )
     train(model, train_loader, val_loader, epochs=25, group=group, lr=args.lr, optim=args.optim)
     wandb.finish()
-    torch.save(model.fc.state_dict(), f"{save_path}/model_fc.pt")
+    if "resnet" in args.model:
+        torch.save(model.fc.state_dict(), f"{save_path}/model.pt")
+    if "vgg" in args.model:
+        torch.save(model.classifier[-1].state_dict(), f"{save_path}/model.pt")
 
     test(model, output_csv=f"{save_path}/submission.csv")
