@@ -67,15 +67,15 @@ def load_model(name):
     # for param in model.parameters():
     #     param.requires_grad = False
 
-    # # Modify the last fully connected layer for binary classification
-    # if hasattr(model, 'fc'):  # ResNet, VGG, DenseNet, etc.
-    #     model.fc = nn.Linear(model.fc.in_features, 1)
+    # Modify the last fully connected layer for binary classification
+    if hasattr(model, 'fc'):  # ResNet, VGG, DenseNet, etc.
+        model.fc = nn.Linear(model.fc.in_features, 1)
     # elif hasattr(model, 'classifier'):  # VGG, MobileNet, Inception
     #     model.classifier[6] = nn.Linear(model.classifier[6].in_features, 1)
     # elif hasattr(model, 'top'):  # Inception V3
     #     model.top = nn.Linear(model.top.in_features, 1)
-    # else:
-    #     raise ValueError(f"Model {name} does not have a recognizable final layer.")
+    else:
+        raise ValueError(f"Model {name} does not have a recognizable final layer.")
 
     # # Unfreeze the final layer
     # for param in model.fc.parameters() if hasattr(model, 'fc') else model.classifier[6].parameters():
