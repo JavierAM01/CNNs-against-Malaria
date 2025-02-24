@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # List of model names
-models = ("resnet50" "vgg16" "resnet152" "vgg19")
-lrs    = ("0.01" "0.001")
-optims = ("adam" "radam" "sgd")
+models=("resnet50" "vgg16" "resnet152" "vgg19")
+lrs=("0.01" "0.001")
+optims=("adam" "radam" "sgd")
 
 # Loop through the models and run the Python script
 
