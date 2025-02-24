@@ -61,6 +61,9 @@ def load_model(name, device="cpu", pretrained_path="", freeze=True):
     if freeze:
         for p in model.parameters():
             p.requires_grad = False
+    else:
+        for p in model.parameters():
+            p.requires_grad = True
 
     ## RESNET ##
     if "resnet" in name:
