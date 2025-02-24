@@ -112,12 +112,23 @@ def load_model(name, device="cpu", pretrained_path=""):
             print(f"Using model from: {pretrained_path}")
 
     ## DENSENET + EFFICIENTNET ##
-    elif "densenet" in name or "efficientnet" in name:
+    elif "densenet" in name:
         for p in model.classifier.parameters():
             p.requires_grad = True
         model.classifier = nn.Sequential(
             nn.Dropout(0.2),
             nn.Linear(model.classifier.in_features, 1000),  # 1024 / 1664
+            nn.ReLU(),
+            nn.Linear(1000, 1)
+        )
+
+    ## EFFICIENTNET ##
+    elif "efficientnet" in name:
+        for p in model.classifier.parameters():
+            p.requires_grad = True
+        model.classifier = nn.Sequential(
+            nn.Dropout(0.2),
+            nn.Linear(model.classifier[-1].in_features, 1000),  # 1024 / 1664
             nn.ReLU(),
             nn.Linear(1000, 1)
         )
