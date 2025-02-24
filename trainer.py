@@ -82,6 +82,7 @@ def load_model(name, device="cpu", pretrained_path=""):
             nn.ReLU(),
             nn.Linear(32, 1)
         )
+        model.save_layer = model.fc
         if pretrained_path != "":
             model.fc.load_state_dict(torch.load(pretrained_path))
             print(f"Using model from: {pretrained_path}")
@@ -107,6 +108,7 @@ def load_model(name, device="cpu", pretrained_path=""):
             nn.ReLU(),
             nn.Linear(32, 1)
         )
+        model.save_layer = model.classifier[-1]
         if pretrained_path != "":
             model.classifier[-1].load_state_dict(torch.load(pretrained_path))
             print(f"Using model from: {pretrained_path}")
@@ -121,6 +123,7 @@ def load_model(name, device="cpu", pretrained_path=""):
             nn.ReLU(),
             nn.Linear(1000, 1)
         )
+        model.save_layer = model.classifier
         if pretrained_path != "":
             model.classifier.load_state_dict(torch.load(pretrained_path))
             print(f"Using model from: {pretrained_path}")
@@ -135,6 +138,7 @@ def load_model(name, device="cpu", pretrained_path=""):
             nn.ReLU(),
             nn.Linear(1000, 1)
         )
+        model.save_layer = model.classifier[-1]
         if pretrained_path != "":
             model.classifier[-1].load_state_dict(torch.load(pretrained_path))
             print(f"Using model from: {pretrained_path}")
@@ -149,6 +153,7 @@ def load_model(name, device="cpu", pretrained_path=""):
             nn.ReLU(),
             nn.Linear(1000, 1)
         )
+        model.save_layer = model.classifier
         if pretrained_path != "":
             model.classifier.load_state_dict(torch.load(pretrained_path))
             print(f"Using model from: {pretrained_path}")
@@ -164,6 +169,7 @@ def load_model(name, device="cpu", pretrained_path=""):
             nn.ReLU(),
             nn.Linear(512, 1)
         )
+        model.save_layer = model.fc
         if pretrained_path != "":
             model.fc.load_state_dict(torch.load(pretrained_path))
             print(f"Using model from: {pretrained_path}")
@@ -179,6 +185,7 @@ def load_model(name, device="cpu", pretrained_path=""):
             nn.ReLU(),
             nn.Linear(512, 1)
         )
+        model.save_layer = model.classifier[-1]
         if pretrained_path != "":
             model.classifier[-1].load_state_dict(torch.load(pretrained_path))
             print(f"Using model from: {pretrained_path}")
