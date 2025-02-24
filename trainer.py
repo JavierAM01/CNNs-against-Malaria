@@ -59,6 +59,7 @@ def load_model(name, device="cpu", pretrained_path="", freeze=True):
 
     # Freeze all layers
     if freeze:
+        print("Freezing model...")
         for p in model.parameters():
             p.requires_grad = False
     else:
