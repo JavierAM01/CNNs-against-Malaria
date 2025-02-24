@@ -62,6 +62,7 @@ def load_model(name, device="cpu", pretrained_path="", freeze=True):
         for p in model.parameters():
             p.requires_grad = False
     else:
+        print("Using full model... (no freeze)")
         for p in model.parameters():
             p.requires_grad = True
 
