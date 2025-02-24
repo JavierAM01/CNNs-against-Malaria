@@ -1,0 +1,49 @@
+Traceback (most recent call last):
+  File "/ocean/projects/cis240109p/abollado/NN/HW2/CNNs-against-Malaria/main.py", line 182, in <module>
+    train(model, train_loader, val_loader, criterion, optimizer, epochs=10)
+  File "/ocean/projects/cis240109p/abollado/NN/HW2/CNNs-against-Malaria/main.py", line 93, in train
+    outputs = model(images)
+              ^^^^^^^^^^^^^
+  File "/ocean/projects/cis240109p/abollado/GenAI/HW2/Small_Difussion_Model/venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1739, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ocean/projects/cis240109p/abollado/GenAI/HW2/Small_Difussion_Model/venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1750, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ocean/projects/cis240109p/abollado/GenAI/HW2/Small_Difussion_Model/venv/lib/python3.12/site-packages/torchvision/models/inception.py", line 166, in forward
+    x, aux = self._forward(x)
+             ^^^^^^^^^^^^^^^^
+  File "/ocean/projects/cis240109p/abollado/GenAI/HW2/Small_Difussion_Model/venv/lib/python3.12/site-packages/torchvision/models/inception.py", line 138, in _forward
+    aux = self.AuxLogits(x)
+          ^^^^^^^^^^^^^^^^^
+  File "/ocean/projects/cis240109p/abollado/GenAI/HW2/Small_Difussion_Model/venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1739, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ocean/projects/cis240109p/abollado/GenAI/HW2/Small_Difussion_Model/venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1750, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ocean/projects/cis240109p/abollado/GenAI/HW2/Small_Difussion_Model/venv/lib/python3.12/site-packages/torchvision/models/inception.py", line 386, in forward
+    x = self.conv1(x)
+        ^^^^^^^^^^^^^
+  File "/ocean/projects/cis240109p/abollado/GenAI/HW2/Small_Difussion_Model/venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1739, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ocean/projects/cis240109p/abollado/GenAI/HW2/Small_Difussion_Model/venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1750, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ocean/projects/cis240109p/abollado/GenAI/HW2/Small_Difussion_Model/venv/lib/python3.12/site-packages/torchvision/models/inception.py", line 405, in forward
+    x = self.conv(x)
+        ^^^^^^^^^^^^
+  File "/ocean/projects/cis240109p/abollado/GenAI/HW2/Small_Difussion_Model/venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1739, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ocean/projects/cis240109p/abollado/GenAI/HW2/Small_Difussion_Model/venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1750, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ocean/projects/cis240109p/abollado/GenAI/HW2/Small_Difussion_Model/venv/lib/python3.12/site-packages/torch/nn/modules/conv.py", line 554, in forward
+    return self._conv_forward(input, self.weight, self.bias)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ocean/projects/cis240109p/abollado/GenAI/HW2/Small_Difussion_Model/venv/lib/python3.12/site-packages/torch/nn/modules/conv.py", line 549, in _conv_forward
+    return F.conv2d(
+           ^^^^^^^^^
+RuntimeError: Calculated padded input size per channel: (1 x 1). Kernel size: (5 x 5). Kernel size can't be greater than actual input size

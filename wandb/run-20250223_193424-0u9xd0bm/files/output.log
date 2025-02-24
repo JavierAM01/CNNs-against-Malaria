@@ -1,0 +1,10 @@
+Epoch [1/10], Loss: 154.5767, Train Acc: 0.89, Val Acc: 0.92
+Epoch [2/10], Loss: 116.2091, Train Acc: 0.92, Val Acc: 0.93
+Epoch [3/10], Loss: 109.3628, Train Acc: 0.93, Val Acc: 0.93
+Epoch [4/10], Loss: 103.6973, Train Acc: 0.93, Val Acc: 0.93
+Epoch [5/10], Loss: 99.8440, Train Acc: 0.93, Val Acc: 0.94
+Epoch [6/10], Loss: 98.5697, Train Acc: 0.94, Val Acc: 0.93
+Epoch [7/10], Loss: 96.6267, Train Acc: 0.94, Val Acc: 0.94
+Epoch [8/10], Loss: 93.7774, Train Acc: 0.94, Val Acc: 0.93
+Epoch [9/10], Loss: 91.2585, Train Acc: 0.94, Val Acc: 0.94
+Epoch [10/10], Loss: 89.5107, Train Acc: 0.94, Val Acc: 0.94

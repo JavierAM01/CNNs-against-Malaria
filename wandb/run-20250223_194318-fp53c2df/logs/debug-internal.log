@@ -1,0 +1,16 @@
+{"time":"2025-02-23T19:43:18.400510079-05:00","level":"INFO","msg":"stream: starting","core version":"0.19.6","symlink path":"/ocean/projects/cis240109p/abollado/NN/HW2/CNNs-against-Malaria/wandb/run-20250223_194318-fp53c2df/logs/debug-core.log"}
+{"time":"2025-02-23T19:43:18.508158237-05:00","level":"INFO","msg":"created new stream","id":"fp53c2df"}
+{"time":"2025-02-23T19:43:18.508211537-05:00","level":"INFO","msg":"stream: started","id":"fp53c2df"}
+{"time":"2025-02-23T19:43:18.508221235-05:00","level":"INFO","msg":"writer: Do: started","stream_id":"fp53c2df"}
+{"time":"2025-02-23T19:43:18.508227003-05:00","level":"INFO","msg":"handler: started","stream_id":"fp53c2df"}
+{"time":"2025-02-23T19:43:18.508250987-05:00","level":"INFO","msg":"sender: started","stream_id":"fp53c2df"}
+{"time":"2025-02-23T19:43:18.705846374-05:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-02-23T19:49:33.03883475-05:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-02-23T19:49:33.039318702-05:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-02-23T19:49:33.456011783-05:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-02-23T19:49:33.593102764-05:00","level":"INFO","msg":"handler: operation stats","stats":{}}
+{"time":"2025-02-23T19:49:34.780154923-05:00","level":"INFO","msg":"stream: closing","id":"fp53c2df"}
+{"time":"2025-02-23T19:49:34.780187386-05:00","level":"INFO","msg":"handler: closed","stream_id":"fp53c2df"}
+{"time":"2025-02-23T19:49:34.780199158-05:00","level":"INFO","msg":"writer: Close: closed","stream_id":"fp53c2df"}
+{"time":"2025-02-23T19:49:34.780206847-05:00","level":"INFO","msg":"sender: closed","stream_id":"fp53c2df"}
+{"time":"2025-02-23T19:49:34.780404373-05:00","level":"INFO","msg":"stream: closed","id":"fp53c2df"}

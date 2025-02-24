@@ -179,7 +179,7 @@ if __name__ == "__main__":
         project="cnn-against-malaria",
         name=name,    
     )
-    train(model, train_loader, val_loader, criterion, optimizer, epochs=1)
+    train(model, train_loader, val_loader, criterion, optimizer, epochs=10)
     wandb.finish()
 
-    test(model)
+    test(model, output_csv=f"submission_{name}.csv")
