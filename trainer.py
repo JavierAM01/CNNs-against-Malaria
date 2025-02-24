@@ -84,7 +84,7 @@ def train(model, train_loader, val_loader, epochs=10, group="", lr=0.001, optim=
     criterion = nn.BCEWithLogitsLoss()
     if optim == "adam":
         optimizer = torch.optim.Adam(model.parameters(), lr=lr)
-    elif optim == "radam"
+    elif optim == "radam":
         optimizer = torch.optim.RAdam(model.parameters(), lr=lr)
     elif optim == "sgd":
         optimizer = torch.optim.SGD(model.parameters(), lr=lr, momentum=0.9, weight_decay=1e-4)
