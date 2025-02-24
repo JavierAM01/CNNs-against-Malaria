@@ -121,6 +121,23 @@ def load_model(name, device="cpu", pretrained_path=""):
             nn.ReLU(),
             nn.Linear(1000, 1)
         )
+        if pretrained_path != "":
+            model.classifier.load_state_dict(torch.load(pretrained_path))
+            print(f"Using model from: {pretrained_path}")
+
+    ## MOBILENET ##
+    elif "mobilenet" in name:
+        for p in model.classifier[-1].parameters():
+            p.requires_grad = True
+        model.classifier[-1] = nn.Sequential(
+            nn.Dropout(0.2),
+            nn.Linear(model.classifier[-1].in_features, 1000),  # 1024 / 1664
+            nn.ReLU(),
+            nn.Linear(1000, 1)
+        )
+        if pretrained_path != "":
+            model.classifier[-1].load_state_dict(torch.load(pretrained_path))
+            print(f"Using model from: {pretrained_path}")
 
     ## EFFICIENTNET ##
     elif "efficientnet" in name:
@@ -132,6 +149,9 @@ def load_model(name, device="cpu", pretrained_path=""):
             nn.ReLU(),
             nn.Linear(1000, 1)
         )
+        if pretrained_path != "":
+            model.classifier.load_state_dict(torch.load(pretrained_path))
+            print(f"Using model from: {pretrained_path}")
 
     ## REGNET ##
     elif "regnet" in name:
@@ -153,14 +173,14 @@ def load_model(name, device="cpu", pretrained_path=""):
         for p in model.classifier[-1].parameters():
             p.requires_grad = True
         model.classifier[-1] = nn.Sequential(
-            nn.Linear(model.classifier.in_features, 1000),  # 768
+            nn.Linear(model.classifier[-1].in_features, 1000),  # 768
             nn.ReLU(),
             nn.Linear(1000, 512),
             nn.ReLU(),
             nn.Linear(512, 1)
         )
         if pretrained_path != "":
-            model.fc.load_state_dict(torch.load(pretrained_path))
+            model.classifier[-1].load_state_dict(torch.load(pretrained_path))
             print(f"Using model from: {pretrained_path}")
 
     # Print the number of trainable and non-trainable parameters
