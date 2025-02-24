@@ -26,7 +26,7 @@ def load_data():
     return train_dataset, val_dataset
 
 
-def create_data_loaders(train_dataset, val_dataset):
-    train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
-    val_loader = DataLoader(val_dataset, batch_size=32, shuffle=False)
+def create_data_loaders(train_dataset, val_dataset, batch_size=32):
+    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
+    val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False)
     return train_loader, val_loader
