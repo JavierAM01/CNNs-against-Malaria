@@ -48,12 +48,6 @@ def load_model(name, device="cpu", pretrained_path="", nofreeze=False):
         model = models.regnet_y_400mf(weights=models.RegNet_Y_400MF_Weights.IMAGENET1K_V1)
     elif name == "convnext_tiny":
         model = models.convnext_tiny(weights=models.ConvNeXt_Tiny_Weights.IMAGENET1K_V1)
-    # elif name == "swin_t":
-    #     model = models.swin_t(weights=models.Swin_T_Weights.IMAGENET1K_V1)
-    # elif name == "mnasnet":
-    #     model = models.mnasnet1_0(weights=models.MNASNet1_0_Weights.IMAGENET1K_V1)
-    # elif name == "vit_b_16":
-    #     model = models.vit_b_16(weights=models.ViT_B_16_Weights.IMAGENET1K_V1)
     else:
         raise ValueError(f"Model {name} not recognized")
 
@@ -71,12 +65,6 @@ def load_model(name, device="cpu", pretrained_path="", nofreeze=False):
     if "resnet" in name:
         for p in model.fc.parameters():
             p.requires_grad = True
-        # n = 256
-        # model.fc = nn.Sequential(
-        #     nn.Linear(model.fc.in_features, n),  # 2048 -> n
-        #     nn.ReLU(),
-        #     nn.Linear(n, 1)  # n -> 1
-        # )
         model.fc = nn.Sequential(
             nn.Linear(model.fc.in_features, 512),  # 2048 -> n
             nn.ReLU(),
@@ -97,12 +85,6 @@ def load_model(name, device="cpu", pretrained_path="", nofreeze=False):
     elif "vgg" in name:
         for p in model.classifier[-1].parameters():
             p.requires_grad = True
-        # n = 128
-        # model.classifier[-1] = nn.Sequential(
-        #     nn.Linear(model.classifier[-1].in_features, n),  # 4096 -> n
-        #     nn.ReLU(),
-        #     nn.Linear(n, 1)  # n -> 1
-        # )
         model.classifier[-1] = nn.Sequential(
             nn.Linear(model.classifier[-1].in_features, 512),  # 4096
             nn.ReLU(),
