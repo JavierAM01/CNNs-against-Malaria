@@ -2,6 +2,14 @@
 
 This report outlines the implementation of a convolutional neural network (CNN)-based machine learning model designed to predict whether a cell is parasitized by the genus *Plasmodium*. The task is simplified by the fact that each image in the dataset contains only a single cell, with labels of `0` (uninfected) and `1` (parasitized). The project leverages various pre-trained models, adapts them with custom sequential layers for fine-tuning, and finally evaluates the model on a test set. Predictions are then submitted on Kaggle.
 
+<p align="center">
+  <img src="images/cell.png"  height="150">
+  <img src="images/cell2.png" height="150">
+  <img src="images/cell3.png" height="150">
+  <img src="images/cell4.png" height="150">
+  <img src="images/cell5.png" height="150">
+</p>
+
 ---
 
 ## Project Summary
